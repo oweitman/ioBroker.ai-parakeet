@@ -1,0 +1,268 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ioBroker/web-components/main/schemas/manifest.json",
+  "manifestVersion": 1,
+  "tag": "iob-wakeword",
+  "name": {
+    "en": "Wake word microphone",
+    "de": "Aktivierungswort-Mikrofon"
+  },
+  "description": {
+    "en": "Local voice input through ai-parakeet",
+    "de": "Lokale Spracheingabe über ai-parakeet"
+  },
+  "icon": "wakeword.svg",
+  "module": "wakeword.js",
+  "size": {
+    "width": 320,
+    "height": 220
+  },
+  "settings": {
+    "type": "panel",
+    "items": {
+      "parakeet": {
+        "type": "instance",
+        "adapter": "ai-parakeet",
+        "default": "ai-parakeet.0",
+        "label": {
+          "en": "Parakeet instance",
+          "de": "Parakeet-Instanz"
+        }
+      },
+      "autoStart": {
+        "type": "checkbox",
+        "default": false,
+        "label": {
+          "en": "Start microphone when loaded",
+          "de": "Mikrofon beim Laden aktivieren"
+        }
+      },
+      "mode": {
+        "type": "select",
+        "default": "wakeword",
+        "label": {
+          "en": "Activation mode",
+          "de": "Aktivierungsmodus"
+        },
+        "options": [
+          {
+            "value": "wakeword",
+            "label": {
+              "en": "Wake word",
+              "de": "Aktivierungswort"
+            }
+          },
+          {
+            "value": "ptt",
+            "label": {
+              "en": "Push to talk",
+              "de": "Sprechtaste"
+            }
+          },
+          {
+            "value": "combined",
+            "label": {
+              "en": "Both",
+              "de": "Beide"
+            }
+          }
+        ]
+      },
+      "microphone": {
+        "type": "text",
+        "default": "",
+        "label": {
+          "en": "Microphone device ID (optional)",
+          "de": "Mikrofon-Geräte-ID (optional)"
+        }
+      },
+      "ringBufferMs": {
+        "type": "number",
+        "label": {
+          "en": "Ring buffer (ms)",
+          "de": "Ringpuffer (ms)"
+        },
+        "default": 1000,
+        "min": 0,
+        "max": 3000
+      },
+      "stripWakeword": {
+        "type": "checkbox",
+        "default": false,
+        "label": {
+          "en": "Exclude wake word from sent audio",
+          "de": "Aktivierungswort nicht übertragen"
+        }
+      },
+      "threshold": {
+        "type": "number",
+        "label": {
+          "en": "VAD threshold (0–1)",
+          "de": "VAD-Schwelle (0–1)"
+        },
+        "default": 0.015,
+        "min": 0.001,
+        "max": 1
+      },
+      "minSpeechMs": {
+        "type": "number",
+        "label": {
+          "en": "Minimum speech (ms)",
+          "de": "Minimale Sprachdauer (ms)"
+        },
+        "default": 250,
+        "min": 0,
+        "max": 5000
+      },
+      "silenceMs": {
+        "type": "number",
+        "label": {
+          "en": "Trailing silence (ms)",
+          "de": "Stille nach Sprache (ms)"
+        },
+        "default": 1200,
+        "min": 100,
+        "max": 10000
+      },
+      "noSpeechMs": {
+        "type": "number",
+        "label": {
+          "en": "No-speech timeout (ms)",
+          "de": "Wartezeit nach Aktivierung (ms)"
+        },
+        "default": 5000,
+        "min": 500,
+        "max": 20000
+      },
+      "maxRecordMs": {
+        "type": "number",
+        "label": {
+          "en": "Maximum recording (ms)",
+          "de": "Maximale Aufnahme (ms)"
+        },
+        "default": 15000,
+        "min": 1000,
+        "max": 60000
+      },
+      "activationTone": {
+        "type": "checkbox",
+        "default": false,
+        "label": {
+          "en": "Activation sound",
+          "de": "Aktivierungston"
+        }
+      },
+      "completionTone": {
+        "type": "checkbox",
+        "default": false,
+        "label": {
+          "en": "Completion sound",
+          "de": "Abschlusston"
+        }
+      },
+      "showText": {
+        "type": "checkbox",
+        "default": true,
+        "label": {
+          "en": "Show recognized text",
+          "de": "Erkannten Text anzeigen"
+        }
+      },
+      "showInterim": {
+        "type": "checkbox",
+        "default": true,
+        "label": {
+          "en": "Show interim text",
+          "de": "Zwischenresultate anzeigen"
+        }
+      },
+      "compact": {
+        "type": "checkbox",
+        "default": false,
+        "label": {
+          "en": "Compact view",
+          "de": "Kompakte Darstellung"
+        }
+      },
+      "language": {
+        "type": "select",
+        "default": "auto",
+        "label": {
+          "en": "Interface language",
+          "de": "Sprache der Oberfläche"
+        },
+        "options": [
+          {
+            "value": "auto",
+            "label": {
+              "en": "Automatic",
+              "de": "Automatisch"
+            }
+          },
+          {
+            "value": "de",
+            "label": "Deutsch"
+          },
+          {
+            "value": "en",
+            "label": "English"
+          }
+        ]
+      },
+      "accentColor": {
+        "type": "color",
+        "default": "#2563eb",
+        "label": {
+          "en": "Accent color",
+          "de": "Akzentfarbe"
+        }
+      },
+      "fontSize": {
+        "type": "number",
+        "label": {
+          "en": "Font size (px)",
+          "de": "Schriftgröße (px)"
+        },
+        "default": 16,
+        "min": 10,
+        "max": 40
+      },
+      "resultState": {
+        "type": "objectId",
+        "label": {
+          "en": "Result state (optional)",
+          "de": "Ergebnis-Datenpunkt (optional)"
+        }
+      },
+      "statusState": {
+        "type": "objectId",
+        "label": {
+          "en": "Status state (optional)",
+          "de": "Status-Datenpunkt (optional)"
+        }
+      },
+      "errorState": {
+        "type": "objectId",
+        "label": {
+          "en": "Error state (optional)",
+          "de": "Fehler-Datenpunkt (optional)"
+        }
+      },
+      "forwardInstance": {
+        "type": "text",
+        "default": "",
+        "label": {
+          "en": "Forward to adapter instance (optional)",
+          "de": "An Adapter-Instanz weiterleiten (optional)"
+        }
+      },
+      "forwardCommand": {
+        "type": "text",
+        "default": "",
+        "label": {
+          "en": "Forward command",
+          "de": "Weiterleitungsbefehl"
+        }
+      }
+    }
+  }
+}

@@ -176,6 +176,16 @@ The adapter is licensed under the MIT license. The model [nvidia/parakeet-tdt-0.
     ### **WORK IN PROGRESS**
 -->
 
+## VIS-2 wake word widget
+
+This adapter also provides the `<iob-wakeword>` Web Component for VIS-2. Build it with `npm ci` and `npm run build`; npm installs the Web Component dependencies through the workspace, and the component and its local model assets are then available under `admin/webcomponents/`. Add **Wake word microphone** to a VIS-2 view and select the `ai-parakeet` instance. No second adapter or instance is needed. The microphone button enables or disables listening. The widget setting **Start microphone when loaded** controls automatic activation in runtime; the VIS editor never starts capture.
+
+The widget supports wake word, push to talk and combined modes. Before activation, microphone audio remains in browser memory. Once activated, 16 kHz mono PCM is sent through the adapter's existing `live` message protocol. It uses a local AudioWorklet, a configurable one-second ring buffer by default, and local energy-based voice activity detection. The widget can show intermediate and final transcripts, write result/status/error states, and optionally forward a final result with `sendTo(instance, command, payload)`. The payload contains `text`, `timestamp`, `source` (`ai-parakeet-wakeword`), `sessionId`, and `final: true`; it has no language field because live events do not reliably supply one.
+
+The adapter's **Wake word widget** configuration tab selects up to three local ONNX classifiers and their threshold. `io_broker` is the default; `hey_jarvis`, `alexa`, `hey_mycroft`, and `hey_rhasspy` are bundled. Custom `.onnx` classifiers can be uploaded there. They must accept `[1,16,96]` float32 embeddings and emit a score; changing the model label does not train another wake word. The bundled feature and additional wake word models have separate licenses documented in [model provenance](admin/webcomponents/models/SOURCES.md). The OpenWakeWord release assets are CC BY-NC-SA 4.0, which limits commercial distribution or use without separate rights.
+
+Microphone access requires HTTPS or localhost and browser permission. Automatic start may still require a user click under browser audio policies. Background tabs, screen lock, and mobile power management can pause capture. Configure the widget only on a view that stays mounted if continuous listening across VIS pages is required. Run `npm run check`, `npm run lint`, `npm test`, and `npm run build` for verification. `npm run test:wakeword` includes a local ONNX/WASM inference smoke test. Live accuracy and tablet behavior require testing with the target microphone and VIS-2 installation.
+
 ## Changelog
 <!--
     Placeholder for the next version (at the beginning of the line):

@@ -37,3 +37,17 @@ describe('web component of the live test', () => {
         }
     });
 });
+
+describe('VIS-2 wake word web component', () => {
+    it('is published by ai-parakeet and uses its instance for recognition and model settings', () => {
+        const adapter = JSON.parse(readFileSync(join(ROOT, 'io-package.json'), 'utf8'));
+        const manifest = JSON.parse(readFileSync(join(DIR, 'wakeword.json'), 'utf8'));
+        assert.ok(adapter.common.webComponents.includes('webcomponents/wakeword.json'));
+        assert.equal(manifest.tag, 'iob-wakeword');
+        assert.equal(manifest.settings.items.parakeet.adapter, 'ai-parakeet');
+        assert.equal(manifest.settings.items.wakewordAdapter, undefined);
+        for (const file of [manifest.module, 'wakeword-capture.js', 'models/io_broker.onnx']) {
+            assert.ok(existsSync(join(DIR, file)), file);
+        }
+    });
+});

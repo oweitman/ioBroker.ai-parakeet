@@ -51,5 +51,12 @@
   "The audio goes through the connection of admin: no HTTPS of the server and no API key needed. Admin itself must be opened over HTTPS or on localhost.": "Das Audio läuft über die Verbindung des Admins: kein HTTPS des Servers und kein API-Schlüssel nötig. Der Admin selbst muss über HTTPS oder auf localhost geöffnet sein.",
   "Live recognition": "Live-Erkennung",
   "Test page in the browser": "Testseite im Browser",
-  "Test page and admin together": "Testseite und Admin zusammen"
+  "Test page and admin together": "Testseite und Admin zusammen",
+  "Wake word widget": "Aktivierungswort-Widget",
+  "Configure local wake word recognition for the VIS-2 web component. The microphone is controlled in the widget.": "Lokale Aktivierungswort-Erkennung für die VIS-2-Webkomponente einstellen. Das Mikrofon wird im Widget gesteuert.",
+  "Wake word model": "Aktivierungswort-Modell",
+  "Second wake word": "Zweites Aktivierungswort",
+  "Third wake word": "Drittes Aktivierungswort",
+  "Detection threshold": "Erkennungsschwelle",
+  "Upload ONNX wake word model": "ONNX-Modell für Aktivierungswort hochladen"
 }

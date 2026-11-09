@@ -29,6 +29,8 @@ import type { AiParakeetConfig } from './types';
 const DEFAULT_PORT = 9999;
 const MAX_FILE_BYTES = 64 * 1024 * 1024;
 const WILDCARD_ADDRESSES = ['', '0.0.0.0', '::'];
+const BUNDLED_WAKEWORDS = ['io_broker', 'hey_jarvis', 'alexa', 'hey_mycroft', 'hey_rhasspy'];
+const MAX_WAKEWORD_MODEL_BYTES = 10 * 1024 * 1024;
 
 type Status = 'starting' | 'downloading' | 'verifying' | 'loading' | 'ready' | 'idle' | 'error';
 
@@ -526,6 +528,40 @@ export class AiParakeetAdapter extends Adapter {
         let response: unknown;
         try {
             switch (obj.command) {
+                case 'getWakewords':
+                    response = (await this.wakewordNames()).map(name => ({ value: name, label: name }));
+                    break;
+                case 'getWakewordConfig': {
+                    const available = await this.wakewordNames();
+                    const names = [
+                        this.config.wakewordModel,
+                        this.config.wakewordModel2,
+                        this.config.wakewordModel3,
+                    ].filter(name => name && available.includes(name));
+                    response = {
+                        names: names.length ? names : ['io_broker'],
+                        threshold: num(this.config.wakewordThreshold, 0.5, 0.01, 1),
+                    };
+                    break;
+                }
+                case 'getWakewordModel': {
+                    const name = (obj.message as { name?: unknown } | undefined)?.name;
+                    if (
+                        typeof name !== 'string' ||
+                        !/^[\w.-]+\.onnx$/i.test(name) ||
+                        !(await this.wakewordNames()).includes(name)
+                    ) {
+                        throw new Error('Unknown uploaded wake word model');
+                    }
+                    const file = await this.readFileAsync(this.namespace, `wakeWords/${name}`);
+                    const data = file && typeof file === 'object' && 'file' in file ? file.file : file;
+                    const bytes = Buffer.isBuffer(data) ? data : Buffer.from(data, 'binary');
+                    if (!bytes.length || bytes.length > MAX_WAKEWORD_MODEL_BYTES) {
+                        throw new Error('Invalid wake word model size');
+                    }
+                    response = { base64: bytes.toString('base64') };
+                    break;
+                }
                 case 'transcribe':
                     response = await this.transcribeMessage(obj.message);
                     break;
@@ -574,6 +610,19 @@ export class AiParakeetAdapter extends Adapter {
             response = { error: e.message };
         }
         this.sendTo(obj.from, obj.command, response as ioBroker.MessagePayload, obj.callback);
+    }
+
+    private async wakewordNames(): Promise<string[]> {
+        try {
+            const files = await this.readDirAsync(this.namespace, 'wakeWords/');
+            const uploaded = files
+                .filter(file => !file.isDir)
+                .map(file => file.file.split('/').pop() || '')
+                .filter(name => /^[\w.-]+\.onnx$/i.test(name));
+            return [...BUNDLED_WAKEWORDS, ...uploaded];
+        } catch {
+            return [...BUNDLED_WAKEWORDS];
+        }
     }
 
     // ---------------------------------------------------------------- ffmpeg

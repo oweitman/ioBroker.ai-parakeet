@@ -1,0 +1,51 @@
+import type { WebComponentManifest } from '@iobroker/web-components';
+
+const label = (en: string, de: string): { en: string; de: string } => ({ en, de });
+const number = (en: string, de: string, value: number, min: number, max: number) =>
+    ({ type: 'number' as const, label: label(en, de), default: value, min, max });
+
+export const manifest: WebComponentManifest = {
+    $schema: 'https://raw.githubusercontent.com/ioBroker/web-components/main/schemas/manifest.json',
+    manifestVersion: 1,
+    tag: 'iob-wakeword',
+    name: label('Wake word microphone', 'Aktivierungswort-Mikrofon'),
+    description: label('Local voice input through ai-parakeet', 'Lokale Spracheingabe über ai-parakeet'),
+    icon: 'wakeword.svg',
+    module: 'wakeword.js',
+    size: { width: 320, height: 220 },
+    settings: {
+        type: 'panel',
+        items: {
+            parakeet: { type: 'instance', adapter: 'ai-parakeet', default: 'ai-parakeet.0', label: label('Parakeet instance', 'Parakeet-Instanz') },
+            autoStart: { type: 'checkbox', default: false, label: label('Start microphone when loaded', 'Mikrofon beim Laden aktivieren') },
+            mode: { type: 'select', default: 'wakeword', label: label('Activation mode', 'Aktivierungsmodus'), options: [
+                { value: 'wakeword', label: label('Wake word', 'Aktivierungswort') },
+                { value: 'ptt', label: label('Push to talk', 'Sprechtaste') },
+                { value: 'combined', label: label('Both', 'Beide') },
+            ] },
+            microphone: { type: 'text', default: '', label: label('Microphone device ID (optional)', 'Mikrofon-Geräte-ID (optional)') },
+            ringBufferMs: number('Ring buffer (ms)', 'Ringpuffer (ms)', 1000, 0, 3000),
+            stripWakeword: { type: 'checkbox', default: false, label: label('Exclude wake word from sent audio', 'Aktivierungswort nicht übertragen') },
+            threshold: number('VAD threshold (0–1)', 'VAD-Schwelle (0–1)', 0.015, 0.001, 1),
+            minSpeechMs: number('Minimum speech (ms)', 'Minimale Sprachdauer (ms)', 250, 0, 5000),
+            silenceMs: number('Trailing silence (ms)', 'Stille nach Sprache (ms)', 1200, 100, 10000),
+            noSpeechMs: number('No-speech timeout (ms)', 'Wartezeit nach Aktivierung (ms)', 5000, 500, 20000),
+            maxRecordMs: number('Maximum recording (ms)', 'Maximale Aufnahme (ms)', 15000, 1000, 60000),
+            activationTone: { type: 'checkbox', default: false, label: label('Activation sound', 'Aktivierungston') },
+            completionTone: { type: 'checkbox', default: false, label: label('Completion sound', 'Abschlusston') },
+            showText: { type: 'checkbox', default: true, label: label('Show recognized text', 'Erkannten Text anzeigen') },
+            showInterim: { type: 'checkbox', default: true, label: label('Show interim text', 'Zwischenresultate anzeigen') },
+            compact: { type: 'checkbox', default: false, label: label('Compact view', 'Kompakte Darstellung') },
+            language: { type: 'select', default: 'auto', label: label('Interface language', 'Sprache der Oberfläche'), options: [
+                { value: 'auto', label: label('Automatic', 'Automatisch') }, { value: 'de', label: 'Deutsch' }, { value: 'en', label: 'English' },
+            ] },
+            accentColor: { type: 'color', default: '#2563eb', label: label('Accent color', 'Akzentfarbe') },
+            fontSize: number('Font size (px)', 'Schriftgröße (px)', 16, 10, 40),
+            resultState: { type: 'objectId', label: label('Result state (optional)', 'Ergebnis-Datenpunkt (optional)') },
+            statusState: { type: 'objectId', label: label('Status state (optional)', 'Status-Datenpunkt (optional)') },
+            errorState: { type: 'objectId', label: label('Error state (optional)', 'Fehler-Datenpunkt (optional)') },
+            forwardInstance: { type: 'text', default: '', label: label('Forward to adapter instance (optional)', 'An Adapter-Instanz weiterleiten (optional)') },
+            forwardCommand: { type: 'text', default: '', label: label('Forward command', 'Weiterleitungsbefehl') },
+        },
+    },
+};
