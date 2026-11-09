@@ -91,10 +91,15 @@ class WakewordElement extends IobWebComponent<Settings> {
             : (this.systemLang || navigator.language).toLowerCase().startsWith('de') ? 'de' : 'en';
     }
     #draw(): void {
+        const visStyle = this.closest<HTMLElement>('.vis-widget')?.style;
+        const configuredFontSize = numeric(this.settings.fontSize, 0);
+        // VIS CSS controls the font. The old 16 px default is also treated as automatic for existing widgets.
+        const fontSize = visStyle?.fontSize || configuredFontSize === 16 ? undefined : configuredFontSize || undefined;
+        const accentColor = this.settings.accentColor === '#2563eb' ? undefined : this.settings.accentColor;
         this.#root.render(<WakewordView
             snapshot={this.#state} mode={this.settings.mode || 'wakeword'} language={this.#language()}
             compact={!!this.settings.compact} showText={this.settings.showText !== false}
-            accentColor={this.settings.accentColor || '#2563eb'} fontSize={numeric(this.settings.fontSize, 16)}
+            accentColor={accentColor} fontSize={fontSize}
             editMode={this.editMode}
             onToggle={() => {
                 if (voiceService.state.enabled) void voiceService.disable();

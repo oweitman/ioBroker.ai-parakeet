@@ -482,16 +482,18 @@ var ue = "M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1
 function fe(e) {
 	let { snapshot: r } = e, i = de[e.language], a = r.enabled;
 	return /* @__PURE__ */ n("div", {
+		part: "content",
 		className: `wakeword ${e.compact ? "compact" : ""}`,
 		style: {
-			"--wake-accent": e.accentColor,
-			fontSize: e.fontSize
+			...e.accentColor ? { "--wake-accent": e.accentColor } : {},
+			...e.fontSize ? { fontSize: e.fontSize } : {}
 		},
 		children: [
 			/* @__PURE__ */ n("div", {
 				className: "top",
 				children: [/* @__PURE__ */ t("button", {
 					type: "button",
+					part: "microphone",
 					className: `mic ${a ? "on" : ""}`,
 					"aria-pressed": a,
 					"aria-label": a ? i.on : i.off,
@@ -504,11 +506,13 @@ function fe(e) {
 						children: /* @__PURE__ */ t("path", { d: ue })
 					})
 				}), /* @__PURE__ */ n("div", {
+					part: "status",
 					className: "status",
 					children: [/* @__PURE__ */ t("strong", { children: e.editMode ? i.editor : i[r.phase] }), r.wakeword && !e.compact ? /* @__PURE__ */ t("small", { children: r.wakeword }) : null]
 				})]
 			}),
 			/* @__PURE__ */ t("div", {
+				part: "meter",
 				className: "meter",
 				role: "meter",
 				"aria-label": "Microphone level",
@@ -518,6 +522,7 @@ function fe(e) {
 				children: /* @__PURE__ */ t("span", { style: { width: `${Math.round(r.level * 100)}%` } })
 			}),
 			e.showText && r.text && !e.compact ? /* @__PURE__ */ t("p", {
+				part: "transcript",
 				className: "text",
 				children: r.text
 			}) : null,
@@ -2987,7 +2992,7 @@ var ar = {
 			level: 0
 		});
 	}
-}(), fr = "\n:host { display:block; width:100%; height:100%; color:var(--iob-color-text, #17212f); }\n* { box-sizing:border-box; }\n.wakeword { width:100%; height:100%; padding:16px; border-radius:12px; background:transparent; color:inherit; overflow:auto; font-family:inherit; }\n.top { display:flex; align-items:center; gap:16px; }\n.mic { width:64px; height:64px; border:0; border-radius:50%; background:#e2e8f0; color:#334155; cursor:pointer; display:grid; place-items:center; flex:none; }\n.mic.on { background:var(--wake-accent); color:#fff; box-shadow:0 0 0 5px color-mix(in srgb, var(--wake-accent) 18%, transparent); }\n.mic:disabled { opacity:.55; cursor:default; }\n.mic svg { width:34px; height:34px; fill:currentColor; }\n.status { display:flex; flex-direction:column; gap:4px; min-width:0; }\n.status strong { font-weight:600; }\n.status small { opacity:.7; }\n.meter { height:5px; background:color-mix(in srgb,currentColor 15%,transparent); border-radius:99px; margin-top:16px; overflow:hidden; }\n.meter span { display:block; height:100%; background:var(--wake-accent); transition:width .1s linear; }\n.text { margin:14px 0 0; line-height:1.4; overflow-wrap:anywhere; }\n.error { color:#dc2626; margin:12px 0 0; }\n.actions { display:flex; gap:8px; margin-top:14px; }\n.actions button { border:1px solid var(--wake-accent); color:var(--wake-accent); background:transparent; border-radius:6px; padding:6px 12px; cursor:pointer; }\n.actions button:disabled { opacity:.5; }\n.compact { padding:8px; }\n.compact .mic { width:42px; height:42px; }\n.compact .mic svg { width:25px; height:25px; }\n.compact .meter { margin-top:8px; }\n@media (prefers-reduced-motion:reduce) { .meter span { transition:none; } }\n", pr = (e, t) => {
+}(), fr = "\n:host { display:block; width:100%; height:100%; color:inherit; font:inherit; }\n* { box-sizing:border-box; }\n.wakeword { width:100%; height:100%; padding:var(--wakeword-padding, 16px); background:transparent; color:inherit; font:inherit; text-align:inherit; overflow:auto; }\n.top { display:flex; align-items:center; gap:16px; }\n.mic { width:64px; height:64px; border:0; border-radius:50%; background:color-mix(in srgb, currentColor 12%, transparent); color:inherit; font:inherit; cursor:pointer; display:grid; place-items:center; flex:none; }\n.mic.on { background:var(--wake-accent, var(--iob-primary, #2563eb)); color:var(--iob-primary-contrast, #fff); box-shadow:0 0 0 5px color-mix(in srgb, var(--wake-accent, var(--iob-primary, #2563eb)) 18%, transparent); }\n.mic:disabled { opacity:.55; cursor:default; }\n.mic svg { width:34px; height:34px; fill:currentColor; }\n.status { display:flex; flex-direction:column; gap:4px; min-width:0; }\n.status strong { font-weight:inherit; }\n.status small { opacity:.7; }\n.meter { height:5px; background:color-mix(in srgb,currentColor 15%,transparent); border-radius:99px; margin-top:16px; overflow:hidden; }\n.meter span { display:block; height:100%; background:var(--wake-accent, var(--iob-primary, #2563eb)); transition:width .1s linear; }\n.text { margin:14px 0 0; overflow-wrap:anywhere; }\n.error { color:var(--iob-error, #dc2626); margin:12px 0 0; }\n.actions { display:flex; gap:8px; margin-top:14px; }\n.actions button { border:1px solid var(--wake-accent, var(--iob-primary, #2563eb)); color:var(--wake-accent, var(--iob-primary, #2563eb)); background:transparent; border-radius:var(--iob-border-radius, 6px); padding:6px 12px; cursor:pointer; font:inherit; }\n.actions button:disabled { opacity:.5; }\n.compact { padding:var(--wakeword-padding, 8px); }\n.compact .mic { width:42px; height:42px; }\n.compact .mic svg { width:25px; height:25px; }\n.compact .meter { margin-top:8px; }\n@media (prefers-reduced-motion:reduce) { .meter span { transition:none; } }\n", pr = (e, t) => {
 	let n = (e || `${t}.0`).replace(/^system\.adapter\./, "");
 	return RegExp(`^${t.replaceAll("-", "\\-")}\\.\\d+$`).test(n) ? n : `${t}.0`;
 }, $ = (e, t) => Number.isFinite(Number(e)) ? Number(e) : t;
@@ -3053,14 +3058,15 @@ le("iob-wakeword", class extends ce {
 		return this.settings.language === "de" || this.settings.language === "en" ? this.settings.language : (this.systemLang || navigator.language).toLowerCase().startsWith("de") ? "de" : "en";
 	}
 	#s() {
+		let e = this.closest(".vis-widget")?.style, n = $(this.settings.fontSize, 0), r = e?.fontSize || n === 16 ? void 0 : n || void 0, i = this.settings.accentColor === "#2563eb" ? void 0 : this.settings.accentColor;
 		this.#e.render(/* @__PURE__ */ t(fe, {
 			snapshot: this.#i,
 			mode: this.settings.mode || "wakeword",
 			language: this.#o(),
 			compact: !!this.settings.compact,
 			showText: this.settings.showText !== !1,
-			accentColor: this.settings.accentColor || "#2563eb",
-			fontSize: $(this.settings.fontSize, 16),
+			accentColor: i,
+			fontSize: r,
 			editMode: this.editMode,
 			onToggle: () => {
 				Q.state.enabled ? Q.disable() : this.socket && Q.enable(this.socket, this.#a());

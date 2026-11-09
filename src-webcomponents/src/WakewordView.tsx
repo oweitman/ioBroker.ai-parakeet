@@ -10,28 +10,30 @@ const WORDS = {
 
 export function WakewordView(props: {
     snapshot: Snapshot; mode: Mode; language: 'de' | 'en'; compact: boolean; showText: boolean;
-    accentColor: string; fontSize: number; editMode: boolean;
+    accentColor?: string; fontSize?: number; editMode: boolean;
     onToggle: () => void; onPtt: () => void; onStop: () => void;
 }): JSX.Element {
     const { snapshot: state } = props;
     const word = WORDS[props.language];
     const active = state.enabled;
     return (
-        <div className={`wakeword ${props.compact ? 'compact' : ''}`} style={{ '--wake-accent': props.accentColor, fontSize: props.fontSize } as React.CSSProperties}>
+        <div part="content" className={`wakeword ${props.compact ? 'compact' : ''}`}
+            style={{ ...(props.accentColor ? { '--wake-accent': props.accentColor } : {}),
+                ...(props.fontSize ? { fontSize: props.fontSize } : {}) } as React.CSSProperties}>
             <div className="top">
-                <button type="button" className={`mic ${active ? 'on' : ''}`} aria-pressed={active}
+                <button type="button" part="microphone" className={`mic ${active ? 'on' : ''}`} aria-pressed={active}
                     aria-label={active ? word.on : word.off} title={active ? word.on : word.off}
                     disabled={props.editMode || state.phase === 'initializing'} onClick={props.onToggle}>
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d={MIC} /></svg>
                 </button>
-                <div className="status"><strong>{props.editMode ? word.editor : word[state.phase]}</strong>
+                <div part="status" className="status"><strong>{props.editMode ? word.editor : word[state.phase]}</strong>
                     {state.wakeword && !props.compact ? <small>{state.wakeword}</small> : null}
                 </div>
             </div>
-            <div className="meter" role="meter" aria-label="Microphone level" aria-valuenow={Math.round(state.level * 100)} aria-valuemin={0} aria-valuemax={100}>
+            <div part="meter" className="meter" role="meter" aria-label="Microphone level" aria-valuenow={Math.round(state.level * 100)} aria-valuemin={0} aria-valuemax={100}>
                 <span style={{ width: `${Math.round(state.level * 100)}%` }} />
             </div>
-            {props.showText && state.text && !props.compact ? <p className="text">{state.text}</p> : null}
+            {props.showText && state.text && !props.compact ? <p part="transcript" className="text">{state.text}</p> : null}
             {state.error && !props.compact ? <p className="error" role="alert">{state.error}</p> : null}
             {(props.mode === 'ptt' || props.mode === 'combined') && !props.editMode ? (
                 <div className="actions">

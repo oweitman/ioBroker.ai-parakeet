@@ -40,7 +40,7 @@ export const manifest: WebComponentManifest = {
                 { value: 'auto', label: label('Automatic', 'Automatisch') }, { value: 'de', label: 'Deutsch' }, { value: 'en', label: 'English' },
             ] },
             accentColor: { type: 'color', default: '#2563eb', label: label('Accent color', 'Akzentfarbe') },
-            fontSize: number('Font size (px)', 'Schriftgröße (px)', 16, 10, 40),
+            fontSize: number('Font size override (0 = VIS CSS)', 'Schriftgröße überschreiben (0 = VIS-CSS)', 0, 0, 40),
             resultState: { type: 'objectId', label: label('Result state (optional)', 'Ergebnis-Datenpunkt (optional)') },
             statusState: { type: 'objectId', label: label('Status state (optional)', 'Status-Datenpunkt (optional)') },
             errorState: { type: 'objectId', label: label('Error state (optional)', 'Fehler-Datenpunkt (optional)') },
